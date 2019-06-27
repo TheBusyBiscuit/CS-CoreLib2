@@ -76,7 +76,7 @@ public final class ItemUtils {
 				if (!((LeatherArmorMeta) aMeta).getColor().equals(((LeatherArmorMeta) bMeta).getColor())) return false;
 			}
 			
-			if (aMeta.getCustomModelData() != bMeta.getCustomModelData()) return false;
+			if (aMeta.getCustomModelData() != bMeta.getCustomModelData()) return true;
 			if (!aMeta.getEnchants().equals(bMeta.getEnchants())) return false;
 			
 			if (aMeta.hasDisplayName() != bMeta.hasDisplayName()) return false;
