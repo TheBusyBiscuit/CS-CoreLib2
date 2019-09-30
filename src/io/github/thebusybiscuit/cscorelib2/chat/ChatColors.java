@@ -9,5 +9,8 @@ public final class ChatColors {
 	public static String color(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
 	}
-	
+
+	public static String colour(String input) {
+                return color(input);
+        }
 }
