@@ -27,7 +27,7 @@ public class BlockLockerProtectionModule implements ProtectionModule {
 	public boolean hasPermission(OfflinePlayer p, Location l, ProtectableAction action) {
 		if (!action.isBlockAction()) return true;
 
-		return(BlockLockerAPI.isAllowed(p.getPlayer(), l.getBlock(), false));
+		return BlockLockerAPI.isAllowed(p.getPlayer(), l.getBlock(), false);
 	}
 }
 	
