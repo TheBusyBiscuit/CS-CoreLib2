@@ -20,6 +20,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 
@@ -108,7 +109,12 @@ public class MinecraftRecipe<T extends Recipe> {
 		recipe -> new RecipeChoice[] {recipe.getInputChoice()}, (input, stream) ->
 		stream.filter(recipe -> recipe.getInputChoice().test(input[0])).findAny().map(StonecuttingRecipe::getResult)
 	);
-	
+
+	public static final MinecraftRecipe<SmithingRecipe> SMITHING_RECIPE = new MinecraftRecipe<>(Material.SMITHING_TABLE, SmithingRecipe.class, recipe -> recipe.length == 2,
+		recipe -> new RecipeChoice[] {recipe.getBase(), recipe.getAddition()}, (input, stream) ->
+		stream.filter(recipe -> recipe.getBase().test(input[0]) && recipe.getAddition().test(input[1])).findAny().map(SmithingRecipe::getResult)
+		);
+
 	@Getter
 	private final Material machine;
 
