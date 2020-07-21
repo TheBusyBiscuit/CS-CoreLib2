@@ -54,7 +54,7 @@ class ChatInputListener implements Listener {
         handlers.remove(e.getPlayer().getUniqueId());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
         String msg = e.getMessage().replace(ChatColor.COLOR_CHAR, '&');
         checkInput(e, e.getPlayer(), msg);
