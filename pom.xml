@@ -7,7 +7,7 @@
     <groupId>com.github.thebusybiscuit</groupId>
     <artifactId>cscorelib2</artifactId>
 
-    <version>0.30.4</version>
+    <version>0.30.5</version>
 
     <packaging>jar</packaging>
     <url>https://github.com/TheBusyBiscuit/CS-CoreLib2</url>
@@ -104,6 +104,27 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.panda_lang</pattern>
+                            <shadedPattern>net.dzikoysk.funnyguilds.libs.org.panda_lang</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -260,7 +281,7 @@
         <dependency>
             <groupId>net.dzikoysk</groupId>
             <artifactId>funnyguilds</artifactId>
-            <version>4.9.5</version>
+            <version>4.9.6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
