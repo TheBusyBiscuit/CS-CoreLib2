@@ -2,16 +2,13 @@ package io.github.thebusybiscuit.cscorelib2.protection;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import io.github.thebusybiscuit.cscorelib2.blocks.BlockPosition;
+import io.github.thebusybiscuit.cscorelib2.collections.OptionalBoolean;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -45,14 +42,9 @@ import lombok.NonNull;
  */
 public final class ProtectionManager {
 
-    private static final CacheBuilder<Object, Object> defaultBuilder = CacheBuilder.newBuilder()
-        .concurrencyLevel(1)
-        .expireAfterAccess(5, TimeUnit.MINUTES);
-
-    private final Cache<UUID, Cache<BlockPosition, Boolean>> permissionCache = defaultBuilder.build();
-
     private final Set<ProtectionModule> protectionModules = new HashSet<>();
     private final Set<ProtectionLogger> protectionLoggers = new HashSet<>();
+    private final ProtectionCache permissionCache = new ProtectionCache();
     private final Logger logger;
 
     /**
@@ -187,14 +179,11 @@ public final class ProtectionManager {
     }
 
     public boolean hasPermission(@NonNull OfflinePlayer p, @NonNull Location l, @NonNull ProtectableAction action) {
-        Cache<BlockPosition, Boolean> map = permissionCache.getIfPresent(p.getUniqueId());
         BlockPosition pos = new BlockPosition(l);
-        if (map != null && map.size() > 0) {
-            Boolean allowed = map.getIfPresent(pos);
+        OptionalBoolean opt = permissionCache.getCachedValue(p.getUniqueId(), pos);
 
-            if (allowed != null) {
-                return allowed;
-            }
+        if (opt.isPresent()) {
+            return opt.getAsBoolean();
         }
 
         boolean hasPermission = true;
@@ -211,12 +200,7 @@ public final class ProtectionManager {
             }
         }
 
-        if (map == null) {
-            map = defaultBuilder.build();
-        }
-
-        map.put(pos, hasPermission);
-        return hasPermission;
+        permissionCache.storeValue(p.getUniqueId(), pos, hasPermission);
     }
 
     public void logAction(@NonNull OfflinePlayer p, @NonNull Block b, @NonNull ProtectableAction action) {
