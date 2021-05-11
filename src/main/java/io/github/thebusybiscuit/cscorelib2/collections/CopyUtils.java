@@ -53,7 +53,7 @@ public final class CopyUtils {
      *
      */
     public static <T, C extends Collection<T>> C deepCopy(@NonNull Collection<T> source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<C> sinkSupplier) {
-        final C sink = sinkSupplier.apply(source.size());
+        C sink = sinkSupplier.apply(source.size());
         deepCopy(source, cloningFunction, sink);
         return sink;
     }
@@ -75,8 +75,8 @@ public final class CopyUtils {
      */
     public static <K, V, M extends Map<K, V>> void deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull M sink) {
         for (Map.Entry<K, V> entry : source.entrySet()) {
-            final V original = entry.getValue();
-            final V cloned = cloningFunction.apply(original);
+            V original = entry.getValue();
+            V cloned = cloningFunction.apply(original);
             sink.put(entry.getKey(), cloned);
         }
     }
@@ -98,7 +98,7 @@ public final class CopyUtils {
      *
      */
     public static <K, V, M extends Map<K, V>> M deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull Supplier<M> sinkSupplier) {
-        final M sink = sinkSupplier.get();
+        M sink = sinkSupplier.get();
         deepCopy(source, cloningFunction, sink);
         return sink;
     }
@@ -117,8 +117,8 @@ public final class CopyUtils {
      */
     public static <K, V> void deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction) {
         for (Map.Entry<K, V> entry : source.entrySet()) {
-            final V original = entry.getValue();
-            final V cloned = cloningFunction.apply(original);
+            V original = entry.getValue();
+            V cloned = cloningFunction.apply(original);
             entry.setValue(cloned);
         }
     }
@@ -158,7 +158,7 @@ public final class CopyUtils {
      *
      */
     public static <T> T[] deepCopy(@NonNull T[] source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<T[]> sinkSupplier) {
-        final T[] sink = sinkSupplier.apply(source.length);
+        T[] sink = sinkSupplier.apply(source.length);
         deepCopy(source, cloningFunction, sink);
         return sink;
     }
