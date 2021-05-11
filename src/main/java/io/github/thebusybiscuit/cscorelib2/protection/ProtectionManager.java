@@ -201,6 +201,7 @@ public final class ProtectionManager {
         }
 
         permissionCache.storeValue(p.getUniqueId(), pos, hasPermission);
+        return hasPermission;
     }
 
     public void logAction(@NonNull OfflinePlayer p, @NonNull Block b, @NonNull ProtectableAction action) {
