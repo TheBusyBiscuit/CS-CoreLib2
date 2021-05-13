@@ -10,6 +10,8 @@ import java.util.function.Supplier;
 
 /**
  * Utilities for deep-copying collections, maps and arrays
+ *
+ * @author md5sha256
  */
 public final class CopyUtils {
     
@@ -19,17 +21,16 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given {@link Collection} to another.
      * <p>
      * If the source collection contains <code>null</code> elements, the cloning function should be
-     * handle null input. Additionally, the sink should also accept any values
+     * able to handle null input. Additionally, the sink should also accept any values
      * contained by the source collection, null or not.
      *
      * @param source          The source of the elements
      * @param cloningFunction The function which clones the elements
      * @param sink            The collection in which to copy to the cloned elements to
      * @param <T>             The type of elements in the collections
-     * @param <C>             The type of the sink
      *
      */
-    public static <T, C extends Collection<T>> void deepCopy(@NonNull Collection<T> source, @NonNull Function<T, T> cloningFunction, @NonNull C sink) {
+    public static <T> void deepCopy(@NonNull Collection<T> source, @NonNull Function<T, T> cloningFunction, @NonNull Collection<T> sink) {
         for (T original : source) {
             T cloned = cloningFunction.apply(original);
             sink.add(cloned);
@@ -40,7 +41,7 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given {@link Collection} to another.
      * <p>
      * If the source collection contains <code>null</code> elements, the cloning function should be
-     * handle null input. Additionally, the sink supplied by the sink supplier
+     * able to handle null input. Additionally, the sink supplied by the sink supplier
      * should also accept any values contained by the source collection, null or not.
      *
      * @param source          The source of the elements
@@ -52,7 +53,7 @@ public final class CopyUtils {
      * @param <C>             The type of the returned collection
      *
      */
-    public static <T, C extends Collection<T>> C deepCopy(@NonNull Collection<T> source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<C> sinkSupplier) {
+    public static <T, C extends Collection<T>> @NonNull C deepCopy(@NonNull Collection<T> source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<C> sinkSupplier) {
         C sink = sinkSupplier.apply(source.size());
         deepCopy(source, cloningFunction, sink);
         return sink;
@@ -62,7 +63,7 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given {@link Map} to another.
      * <p>
      * If the source map contains <code>null</code> values, the cloning function should be
-     * handle null input. Additionally, the sink should also accept any keys and values
+     * able to handle null input. Additionally, the sink should also accept any keys and values
      * contained by the source Map, null or not.
      *
      * @param source          The source of the elements
@@ -70,10 +71,9 @@ public final class CopyUtils {
      * @param sink            The map in which to copy to the cloned elements to
      * @param <K>             The type of keys in the maps
      * @param <V>             The type of values in the maps
-     * @param <M>             The type of the sink
      *
      */
-    public static <K, V, M extends Map<K, V>> void deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull M sink) {
+    public static <K, V> void deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull Map<K, V> sink) {
         for (Map.Entry<K, V> entry : source.entrySet()) {
             V original = entry.getValue();
             V cloned = cloningFunction.apply(original);
@@ -85,7 +85,7 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given {@link Map} to another.
      * <p>
      * If the source map contains <code>null</code> values, the cloning function should be
-     * handle null input. Additionally, the sink should also accept any keys and values
+     * able to handle null input. Additionally, the sink should also accept any keys and values
      * contained by the source Map, null or not.
      *
      * @param source          The source of the elements
@@ -97,7 +97,7 @@ public final class CopyUtils {
      * @param <M>             The type of the returned map
      *
      */
-    public static <K, V, M extends Map<K, V>> M deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull Supplier<M> sinkSupplier) {
+    public static <K, V, M extends Map<K, V>> @NonNull M deepCopy(@NonNull Map<K, V> source, @NonNull Function<V, V> cloningFunction, @NonNull Supplier<M> sinkSupplier) {
         M sink = sinkSupplier.get();
         deepCopy(source, cloningFunction, sink);
         return sink;
@@ -107,7 +107,7 @@ public final class CopyUtils {
      * Perform a deep-clone transformation on all values in a given {@link Map}
      * <p>
      * If the source map contains <code>null</code> values, the cloning function should be
-     * handle null input
+     * able to handle null input.
      *
      * @param source          The source of the elements
      * @param cloningFunction The function which clones the elements
@@ -127,7 +127,7 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given array to another.
      * <p>
      * If the source array contains <code>null</code> elements, the cloning function should be
-     * handle null input.
+     * able to handle null input.
      *
      * @param source          The source of the elements
      * @param cloningFunction The function which clones the elements
@@ -148,7 +148,7 @@ public final class CopyUtils {
      * Perform a deep copy of all the elements from a given array to another.
      * <p>
      * If the source array contains <code>null</code> elements, the cloning function should be
-     * handle null input.
+     * able to handle null input.
      *
      * @param source          The source of the elements
      * @param cloningFunction The function which clones the elements
@@ -157,7 +157,7 @@ public final class CopyUtils {
      * @param <T>             The type of elements in the arrays
      *
      */
-    public static <T> T[] deepCopy(@NonNull T[] source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<T[]> sinkSupplier) {
+    public static <T> @NonNull T[] deepCopy(@NonNull T[] source, @NonNull Function<T, T> cloningFunction, @NonNull IntFunction<T[]> sinkSupplier) {
         T[] sink = sinkSupplier.apply(source.length);
         deepCopy(source, cloningFunction, sink);
         return sink;
