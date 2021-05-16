@@ -1,6 +1,6 @@
 package io.github.thebusybiscuit.cscorelib2.collections;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import lombok.NonNull;
 
 import java.util.Collection;
 import java.util.Map;
