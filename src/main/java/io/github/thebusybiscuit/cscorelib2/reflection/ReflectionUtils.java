@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,7 +19,7 @@ import lombok.NonNull;
 
 /**
  * This class provides some useful static methods to perform reflection.
- * 
+ *
  * @author TheBusyBiscuit
  *
  */
@@ -26,8 +28,10 @@ public final class ReflectionUtils {
 
     private ReflectionUtils() {}
 
-    private static String currentVersion;
+    private static final int MAJOR_VERSION;
+    private static final String CURRENT_VERSION;
     private static final Map<Class<?>, Class<?>> primitiveTypes = new HashMap<>();
+    private static final Pattern versionPattern = Pattern.compile("v\\d_(\\d+)_R\\d");
 
     static {
         primitiveTypes.put(Byte.class, Byte.TYPE);
@@ -38,6 +42,16 @@ public final class ReflectionUtils {
         primitiveTypes.put(Float.class, Float.TYPE);
         primitiveTypes.put(Double.class, Double.TYPE);
         primitiveTypes.put(Boolean.class, Boolean.TYPE);
+
+        CURRENT_VERSION = Bukkit.getServer().getClass().getPackage().getName()
+            .substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
+
+        Matcher matcher = versionPattern.matcher(CURRENT_VERSION);
+        if (matcher.matches()) {
+            MAJOR_VERSION = Integer.parseInt(matcher.group(1));
+        } else {
+            MAJOR_VERSION = 0;
+        }
     }
 
     /**
@@ -115,7 +129,7 @@ public final class ReflectionUtils {
      *            The Name of that Field
      * @param value
      *            The Value for that Field
-     * 
+     *
      * @throws NoSuchFieldException
      *             If the field could not be found.
      * @throws IllegalAccessException
@@ -138,7 +152,7 @@ public final class ReflectionUtils {
      *            The Name of that Field
      * @param value
      *            The Value for that Field
-     * 
+     *
      * @throws NoSuchFieldException
      *             If the field could not be found.
      * @throws IllegalAccessException
@@ -157,12 +171,12 @@ public final class ReflectionUtils {
      *            The Object containing the Field
      * @param field
      *            The Name of that Field
-     * 
+     *
      * @throws NoSuchFieldException
      *             If the field could not be found.
      * @throws IllegalAccessException
      *             If the field could not be queried.
-     * 
+     *
      * @return The Value of a Field
      */
     @Nullable
@@ -178,7 +192,7 @@ public final class ReflectionUtils {
      *
      * @param classes
      *            The Types you want to convert
-     * 
+     *
      * @return An Array of primitive Types
      */
     @Nonnull
@@ -202,7 +216,7 @@ public final class ReflectionUtils {
      *
      * @param objects
      *            The Types you want to convert
-     * 
+     *
      * @return An Array of primitive Types
      */
     @Nonnull
@@ -253,10 +267,10 @@ public final class ReflectionUtils {
      *            The Name of the Class your Inner class is located in
      * @param subname
      *            The Name of the inner Class you are looking for
-     * 
+     *
      * @throws ClassNotFoundException
      *             If the class could not be found.
-     * 
+     *
      * @return The Class in your specified Class
      */
     @Nonnull
@@ -265,19 +279,30 @@ public final class ReflectionUtils {
     }
 
     /**
+     * Returns a `net.minecraft` class via Reflection.
+     *
+     * @param name The class name of which to fetch
+     * @return The `net.minecraft` class.
+     * @throws ClassNotFoundException If the class does not exist
+     */
+    public static Class<?> getNetMinecraftClass(@Nonnull String name) throws ClassNotFoundException {
+        return Class.forName("net.minecraft." + (MAJOR_VERSION <= 16 ? getVersion() + '.' : "") + name);
+    }
+
+    /**
      * Returns an NMS Class via Reflection
      *
      * @param name
      *            The Name of the Class you are looking for
-     * 
+     *
      * @throws ClassNotFoundException
      *             If the class could not be found.
-     * 
+     *
      * @return The Class in that Package
      */
     @Nonnull
     public static Class<?> getNMSClass(@NonNull String name) throws ClassNotFoundException {
-        return Class.forName(new StringBuilder().append("net.minecraft.server.").append(getVersion()).append(".").append(name).toString());
+        return Class.forName("net.minecraft.server." + (MAJOR_VERSION <= 16 ? getVersion() + '.' : "") + name);
     }
 
     /**
@@ -287,10 +312,10 @@ public final class ReflectionUtils {
      *            The Name of the Class your Inner class is located in
      * @param subname
      *            The Name of the inner Class you are looking for
-     * 
+     *
      * @throws ClassNotFoundException
      *             If the class could not be found.
-     * 
+     *
      * @return The Class in your specified Class
      */
     @Nonnull
@@ -303,15 +328,15 @@ public final class ReflectionUtils {
      *
      * @param name
      *            The Name of the Class you are looking for
-     * 
+     *
      * @throws ClassNotFoundException
      *             If the class could not be found.
-     * 
+     *
      * @return The Class in that Package
      */
     @Nonnull
     public static Class<?> getOBCClass(@NonNull String name) throws ClassNotFoundException {
-        return Class.forName(new StringBuilder().append("org.bukkit.craftbukkit.").append(getVersion()).append(".").append(name).toString());
+        return Class.forName("org.bukkit.craftbukkit." + getVersion() + '.' + name);
     }
 
     /**
@@ -321,17 +346,20 @@ public final class ReflectionUtils {
      */
     @Nonnull
     private static String getVersion() {
-        if (currentVersion == null) {
-            currentVersion = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
-        }
+        return CURRENT_VERSION;
+    }
 
-        return currentVersion;
+    /**
+     * Return the Minecraft Major Version (15, 16, 17).
+     */
+    public static int getMajorVersion() {
+        return MAJOR_VERSION;
     }
 
     /**
      * This checks if the current Server instance is a mock (MockBukkit) and
      * whether we are in a Unit Test environment.
-     * 
+     *
      * @return Whether the current Server instance is a mock
      */
     public static boolean isUnitTestEnvironment() {
