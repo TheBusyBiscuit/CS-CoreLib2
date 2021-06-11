@@ -26,8 +26,8 @@ public final class ReflectionUtils {
 
     private ReflectionUtils() {}
 
-    private static int majorVersion;
-    private static String currentVersion;
+    private static final int majorVersion;
+    private static final String currentVersion;
     private static final Map<Class<?>, Class<?>> primitiveTypes = new HashMap<>();
 
     static {
@@ -42,8 +42,12 @@ public final class ReflectionUtils {
 
         currentVersion =  Bukkit.getServer().getClass().getPackage().getName()
             .substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
-        // Turn v1_17_R1 -> 17
-        majorVersion = Integer.parseInt(currentVersion.replace("v1_", "").replace("_R1", ""));
+        if (!isUnitTestEnvironment()) {
+            // Turn v1_17_R1 -> 17
+            majorVersion = Integer.parseInt(currentVersion.replace("v1_", "").replace("_R1", ""));
+        } else {
+            majorVersion = 0;
+        }
     }
 
     /**
@@ -338,10 +342,6 @@ public final class ReflectionUtils {
      */
     @Nonnull
     private static String getVersion() {
-        if (currentVersion == null) {
-            currentVersion = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
-        }
-
         return currentVersion;
     }
 
