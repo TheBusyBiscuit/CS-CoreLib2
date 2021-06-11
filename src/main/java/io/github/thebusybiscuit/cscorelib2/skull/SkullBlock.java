@@ -32,7 +32,6 @@ public final class SkullBlock {
                     .getMethod("setGameProfile", GameProfile.class);
 
                 Class<?> blockPosition = ReflectionUtils.getNetMinecraftClass("core.BlockPosition");
-                System.out.println(blockPosition);
                 newPosition = ReflectionUtils.getConstructor(blockPosition, int.class, int.class, int.class);
                 getTileEntity = ReflectionUtils.getNMSClass("level.WorldServer").getMethod("getTileEntity", blockPosition);
             } else {
