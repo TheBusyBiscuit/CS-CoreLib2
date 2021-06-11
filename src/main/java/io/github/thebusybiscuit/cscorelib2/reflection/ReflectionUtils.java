@@ -26,6 +26,7 @@ public final class ReflectionUtils {
 
     private ReflectionUtils() {}
 
+    private static int majorVersion;
     private static String currentVersion;
     private static final Map<Class<?>, Class<?>> primitiveTypes = new HashMap<>();
 
@@ -38,6 +39,11 @@ public final class ReflectionUtils {
         primitiveTypes.put(Float.class, Float.TYPE);
         primitiveTypes.put(Double.class, Double.TYPE);
         primitiveTypes.put(Boolean.class, Boolean.TYPE);
+
+        currentVersion =  Bukkit.getServer().getClass().getPackage().getName()
+            .substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1);
+        // Turn v1_17_R1 -> 17
+        majorVersion = Integer.parseInt(currentVersion.replace("v1_", "").replace("_R1", ""));
     }
 
     /**
@@ -265,6 +271,17 @@ public final class ReflectionUtils {
     }
 
     /**
+     * Returns a `net.minecraft` class via Reflection.
+     *
+     * @param name The class name of which to fetch
+     * @return The `net.minecraft` class.
+     * @throws ClassNotFoundException If the class does not exist
+     */
+    public static Class<?> getNetMinecraftClass(@Nonnull String name) throws ClassNotFoundException {
+        return Class.forName("net.minecraft." + (majorVersion <= 16 ? getVersion() + '.' : "") + name);
+    }
+
+    /**
      * Returns an NMS Class via Reflection
      *
      * @param name
@@ -277,7 +294,7 @@ public final class ReflectionUtils {
      */
     @Nonnull
     public static Class<?> getNMSClass(@NonNull String name) throws ClassNotFoundException {
-        return Class.forName(new StringBuilder().append("net.minecraft.server.").append(getVersion()).append(".").append(name).toString());
+        return Class.forName("net.minecraft.server." + (majorVersion <= 16 ? getVersion() + '.' : "") + name);
     }
 
     /**
@@ -311,7 +328,7 @@ public final class ReflectionUtils {
      */
     @Nonnull
     public static Class<?> getOBCClass(@NonNull String name) throws ClassNotFoundException {
-        return Class.forName(new StringBuilder().append("org.bukkit.craftbukkit.").append(getVersion()).append(".").append(name).toString());
+        return Class.forName("org.bukkit.craftbukkit." + getVersion() + '.' + name);
     }
 
     /**
@@ -326,6 +343,13 @@ public final class ReflectionUtils {
         }
 
         return currentVersion;
+    }
+
+    /**
+     * Return the Minecraft Major Version (15, 16, 17).
+     */
+    public static int getMajorVersion() {
+        return majorVersion;
     }
 
     /**
