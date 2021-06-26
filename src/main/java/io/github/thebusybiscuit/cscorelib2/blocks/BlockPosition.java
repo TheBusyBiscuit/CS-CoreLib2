@@ -16,6 +16,7 @@ import lombok.NonNull;
  * (Note, this is not accounting for things like object headers)
  * 
  * @author Walshy
+ * @author md5sha256
  */
 public final class BlockPosition {
 
@@ -176,6 +177,19 @@ public final class BlockPosition {
     }
 
     /**
+     * Decompress a BlockPosition into an int[].
+     * @param position The compressed BlockPosition
+     * @return Returns a 3 length int[] where the x coordinate is at index 0, y at index 1 and z at index 2.
+     *
+     */
+    public static int[] decompress(long position) {
+        int x = (int) (position >> 38);
+        int y = (int) (position & 0XFFF);
+        int z = (int) (position << 26 >> 38);
+        return new int[]{x, y, z};
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -187,7 +201,7 @@ public final class BlockPosition {
                 return false;
             }
 
-            return this.getWorld().getUID().equals(pos.getWorld().getUID()) && this.position == pos.position;
+            return this.position == pos.position && this.getWorld().getUID().equals(pos.getWorld().getUID());
         }
 
         return false;
