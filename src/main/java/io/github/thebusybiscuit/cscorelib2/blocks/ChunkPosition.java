@@ -142,10 +142,9 @@ public final class ChunkPosition {
      *
      */
     public static int[] decompress(long position) {
-        int x = (int) (position >> 38);
-        int y = (int) (position & 0XFFF);
-        int z = (int) (position << 26 >> 38);
-        return new int[]{x, y, z};
+        int x = (int) (position >> 32);
+        int z = (int) (position);
+        return new int[]{x, z};
     }
 
     /**
