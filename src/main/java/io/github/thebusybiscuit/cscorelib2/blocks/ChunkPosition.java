@@ -15,6 +15,7 @@ import lombok.NonNull;
  * 
  * @author TheBusyBiscuit
  * @author Walshy
+ * @author md5sha256
  * 
  * @see BlockPosition
  *
@@ -135,6 +136,18 @@ public final class ChunkPosition {
     }
 
     /**
+     * Decompress a ChunkPosition into an int[].
+     * @param position The compressed ChunkPosition
+     * @return Returns a 2 length int[] where the x coordinate is at index 0 and z at index 1.
+     *
+     */
+    public static int[] decompress(long position) {
+        int x = (int) (position >> 32);
+        int z = (int) (position);
+        return new int[]{x, z};
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -146,7 +159,7 @@ public final class ChunkPosition {
                 return false;
             }
 
-            return this.getWorld().getUID().equals(pos.getWorld().getUID()) && this.position == pos.position;
+            return this.position == pos.position && this.getWorld().getUID().equals(pos.getWorld().getUID());
         }
 
         return false;
