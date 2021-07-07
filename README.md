@@ -3,10 +3,20 @@ This is an updated (LITE) Version of CS-CoreLib. Instead of being a dependency, 
 
 [Javadocs](https://javadoc.jitpack.io/com/github/TheBusyBiscuit/CS-CoreLib2/latest/javadoc/index.html)
 
-# Integrating CS-CoreLib2 into your own Plugin
+## :warning: Deprecated - "end of life" :warning:
+`CS-CoreLib2` is currently in its "end of life" stage.
+This library has been re-furnished, improved and expanded and now lives on as ["dough"](https://github.com/baked-libs/dough), a new multi-module project which has all of CS-CoreLib2's original features and more!
+
+CS-CoreLib2 will still be available until **September 2021** but this repository is going to be archived shortly after that and development will cease.
+
+CS-CoreLib2 has grown far past its original [CS-CoreLib](https://github.com/TheBusyBiscuit/CS-CoreLib) predecessor and beyond the current `0.x.x` versioning scheme.
+It's time for our first initial `1.0.0` release and we think it is worthy of a re-branding at this point.
+Why "dough" you ask? Well, the `C` in `CS-CoreLib` stands for cookies and you obviously need dough for baking cookies, right? Good, case closed.
+
+## Integrating CS-CoreLib2 into your own Plugin
 This part presupposes that you have [Maven](https://maven.apache.org/download.cgi) installed and know how to handle your pom.xml
 
-## 1. Adding the repository
+### 1. Adding the repository
 CS-CoreLib2 just sits here on GitHub, so you can use the jitpack.io repository for this.
 Add this part into your ```<repositories>``` section.
 
@@ -17,7 +27,7 @@ Add this part into your ```<repositories>``` section.
 </repository>
 ```
 
-## 2. Adding the dependency
+### 2. Adding the dependency
 Now you can add the dependency itself, for this you add the following into your ```<dependencies>``` section.
 You can use "master-SNAPSHOT" to always use the latest Version, otherwise have a look on [GitHub Tags](https://github.com/TheBusyBiscuit/CS-CoreLib2/tags) to find all available Version numbers you could use.
 
@@ -29,7 +39,7 @@ You can use "master-SNAPSHOT" to always use the latest Version, otherwise have a
 </dependency>
 ```
 
-## 3. Shading
+### 3. Shading
 This Step is the most important and also the most easiest to mess up.
 Add the following to your ```<builds>``` section:
 
@@ -64,7 +74,7 @@ Add the following to your ```<builds>``` section:
 </plugins>
 ```
 
-## 4. Configuration
+### 4. Configuration
 It is very important that you changed your ```<shadedPattern>``` tag to a path WITHIN your project.
 (e.g.   com.something.project.cscorelib2   )
 Now you just need to select the packages you want to include.
@@ -83,7 +93,7 @@ Once you found the ones you need, add their package as an ```<include>``` tag li
 </filters>
 ```
 
-## 5. You are done
+### 5. You are done
 Your pom.xml should now look like this:
 
 ```xml
@@ -162,7 +172,7 @@ Your pom.xml should now look like this:
 </project>
 ```
 
-# Packages
+## Packages
 This Library contains the following Packages:
 See our [Wiki](https://github.com/TheBusyBiscuit/CS-CoreLib2/wiki/) for more Info on what each Package does.
 
