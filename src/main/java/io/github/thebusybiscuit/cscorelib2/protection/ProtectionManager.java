@@ -7,6 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import io.github.thebusybiscuit.cscorelib2.blocks.BlockPosition;
+import io.github.thebusybiscuit.cscorelib2.collections.OptionalBoolean;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -36,12 +38,13 @@ import lombok.NonNull;
  * This Class provides a nifty API for plugins to query popular protection plugins.
  *
  * @author TheBusyBiscuit
- *
+ * @author WalshyDev
  */
 public final class ProtectionManager {
 
     private final Set<ProtectionModule> protectionModules = new HashSet<>();
     private final Set<ProtectionLogger> protectionLoggers = new HashSet<>();
+    private final ProtectionCache permissionCache = new ProtectionCache();
     private final Logger logger;
 
     /**
@@ -176,19 +179,29 @@ public final class ProtectionManager {
     }
 
     public boolean hasPermission(@NonNull OfflinePlayer p, @NonNull Location l, @NonNull ProtectableAction action) {
+        BlockPosition pos = new BlockPosition(l);
+        OptionalBoolean opt = permissionCache.getCachedValue(p.getUniqueId(), pos);
+
+        if (opt.isPresent()) {
+            return opt.getAsBoolean();
+        }
+
+        boolean hasPermission = true;
         for (ProtectionModule module : protectionModules) {
             try {
                 if (!module.hasPermission(p, l, action)) {
-                    return false;
+                    hasPermission = false;
+                    break;
                 }
             } catch (Exception | LinkageError x) {
-                logger.log(Level.SEVERE, x, () -> "An Error occured while querying the Protection Module: \"" + module.getName() + " v" + module.getVersion() + "\"");
+                logger.log(Level.SEVERE, x, () -> "An Error occurred while querying the Protection Module: \"" + module.getName() + " v" + module.getVersion() + "\"");
                 // Fallback will just be "allow".
                 return true;
             }
         }
 
-        return true;
+        permissionCache.storeValue(p.getUniqueId(), pos, hasPermission);
+        return hasPermission;
     }
 
     public void logAction(@NonNull OfflinePlayer p, @NonNull Block b, @NonNull ProtectableAction action) {
@@ -196,7 +209,7 @@ public final class ProtectionManager {
             try {
                 module.logAction(p, b, action);
             } catch (Exception | LinkageError x) {
-                logger.log(Level.SEVERE, x, () -> "An Error occured while logging for the Protection Module: \"" + module.getName() + "\"");
+                logger.log(Level.SEVERE, x, () -> "An Error occurred while logging for the Protection Module: \"" + module.getName() + "\"");
             }
         }
     }
