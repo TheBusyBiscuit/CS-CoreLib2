@@ -5,11 +5,11 @@ This is an updated (LITE) Version of CS-CoreLib. Instead of being a dependency, 
 
 ## :warning: Deprecated - "end of life" :warning:
 `CS-CoreLib2` is currently in its "end of life" stage.
-This library has been re-furnished, improved and expanded and now lives on as ["dough"](https://github.com/baked-libs/dough), a new multi-module project which has all of CS-CoreLib2's original features and more!
+This library has been re-furnished, improved and expanded and now lives on as ["dough"](https://github.com/baked-libs/dough), a new multi-module project which has all of `CS-CoreLib2`'s original features and more!
 
-CS-CoreLib2 will still be available until **September 2021** but this repository is going to be archived shortly after that and development will cease.
+`CS-CoreLib2` will still be available until **September 2021** but this repository is going to be archived shortly after that and development will cease.
 
-CS-CoreLib2 has grown far past its original [CS-CoreLib](https://github.com/TheBusyBiscuit/CS-CoreLib) predecessor and beyond the current `0.x.x` versioning scheme.
+`CS-CoreLib2` has grown far past its original [CS-CoreLib](https://github.com/TheBusyBiscuit/CS-CoreLib) predecessor and beyond the current `0.x.x` versioning scheme.
 It's time for our first initial `1.0.0` release and we think it is worthy of a re-branding at this point.
 Why "dough" you ask? Well, the `C` in `CS-CoreLib` stands for cookies and you obviously need dough for baking cookies, right? Good, case closed.
 
