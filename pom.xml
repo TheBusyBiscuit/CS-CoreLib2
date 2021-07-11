@@ -250,5 +250,16 @@
             <version>4.9.7</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.bloodmc</groupId>
+            <artifactId>GriefDefenderAPI</artifactId>
+            <version>-dd5aa2224c-1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>
